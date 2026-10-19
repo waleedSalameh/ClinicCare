@@ -36,7 +36,7 @@ namespace BLL.Service
             {
                 if (IsNoShow(id))
                 {
-                    throw new Exception("The scheduled date has not yet arrived.");
+                    throw new Exception("The scheduled date has nott yet arrived.");
                 }
             }
             if(dto.Status == AppointmentStatus.Booked) 
