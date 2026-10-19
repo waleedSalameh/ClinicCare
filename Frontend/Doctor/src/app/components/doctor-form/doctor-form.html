@@ -1,0 +1,351 @@
+<div class="doctor-form-container">
+
+  <h2>Doctor Form</h2>
+
+  <form
+    [formGroup]="doctorForm"
+    (ngSubmit)="onSubmit()">
+
+
+    <!-- ========================= -->
+    <!-- Full Name -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Full Name
+      </mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="fullName">
+
+      @if (
+        doctorForm.get('fullName')?.hasError('required')
+        && doctorForm.get('fullName')?.touched
+      ) {
+
+        <mat-error>
+          Full Name is required
+        </mat-error>
+
+      }
+
+    </mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Specialty -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Specialty
+      </mat-label>
+
+      <mat-select
+        formControlName="specialtyId">
+
+        <mat-option [value]="null">
+          Select Specialty
+        </mat-option>
+
+        @for (
+          specialty of specialties;
+          track specialty.id
+        ) {
+
+          <mat-option
+            [value]="specialty.id">
+
+            {{ specialty.name }}
+
+          </mat-option>
+
+        }
+
+      </mat-select>
+
+      @if (
+        doctorForm.get('specialtyId')?.hasError('required')
+        && doctorForm.get('specialtyId')?.touched
+      ) {
+
+        <mat-error style="color: red;">
+          Specialty is required
+        </mat-error>
+
+      }
+
+    </mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Phone Number -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Phone Number
+      </mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="phoneNumber">
+
+      @if (
+        doctorForm.get('phoneNumber')?.hasError('required')
+        && doctorForm.get('phoneNumber')?.touched
+      ) {
+
+        <mat-error>
+          Phone Number is required
+        </mat-error>
+
+      }
+
+      @if (
+        doctorForm.get('phoneNumber')?.hasError('pattern')
+        && doctorForm.get('phoneNumber')?.touched
+      ) {
+
+        <mat-error>
+          Enter a valid Jordanian phone number
+        </mat-error>
+
+      }
+
+    </mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Years Of Experience -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Years Of Experience
+      </mat-label>
+
+      <input
+        matInput
+        type="number"
+        formControlName="yearsOfExperience">
+
+    </mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Email -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Email
+      </mat-label>
+
+      <input
+        matInput
+        type="email"
+        formControlName="email">
+
+      @if (
+        doctorForm.get('email')?.hasError('required')
+        && doctorForm.get('email')?.touched
+      ) {
+
+        <mat-error>
+          Email is required
+        </mat-error>
+
+      }
+
+      @if (
+        doctorForm.get('email')?.hasError('email')
+        && doctorForm.get('email')?.touched
+      ) {
+
+        <mat-error>
+          Enter a valid email
+        </mat-error>
+
+      }
+
+    </mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Gender -->
+    <!-- ========================= -->
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Gender
+      </mat-label>
+
+      <mat-select
+        formControlName="gender">
+
+        <mat-option [value]="null">
+          Select Gender
+        </mat-option>
+
+        <mat-option value="Male">
+          Male
+        </mat-option>
+
+        <mat-option value="Female">
+          Female
+        </mat-option>
+
+      </mat-select>
+
+      @if (
+        doctorForm.get('gender')?.hasError('required')
+        && doctorForm.get('gender')?.touched
+      ) {
+
+        <mat-error>
+          Gender is required
+        </mat-error>
+
+      }
+
+    </mat-form-field>
+<!-- ========================= -->
+<!-- Created Date & Time -->
+<!-- ========================= -->
+
+<mat-form-field appearance="outline">
+
+  <mat-label>
+    Created Date & Time
+  </mat-label>
+
+  <input
+    matInput
+    type="datetime-local"
+    formControlName="createdDateTime">
+
+</mat-form-field>
+
+
+    <!-- ========================= -->
+    <!-- Active -->
+    <!-- ========================= -->
+
+    <mat-checkbox
+      formControlName="isActive"
+      (change)="only($event.checked)">
+
+      Active
+
+    </mat-checkbox>
+
+
+    <!-- ========================= -->
+    <!-- Form Actions -->
+    <!-- ========================= -->
+
+    <div class="form-actions">
+
+      <!-- Save -->
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit">
+
+        Save Doctor
+
+      </button>
+
+
+      <!-- Cancel -->
+
+   <button
+  mat-button
+  type="button"
+  (click)="cancel()">
+
+  Cancel
+
+</button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- Success Dialog -->
+<!-- ========================= -->
+
+<ng-template #successDialog>
+
+  <h2 mat-dialog-title>
+    Success
+  </h2>
+
+  <mat-dialog-content>
+
+    Doctor saved successfully.
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="primary"
+      mat-dialog-close>
+
+      Close
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- ========================= -->
+<!-- Error Dialog -->
+<!-- ========================= -->
+
+<ng-template #errorDialog>
+
+  <h2 mat-dialog-title>
+    Error
+  </h2>
+
+  <mat-dialog-content>
+
+    Failed to save doctor.
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="warn"
+      mat-dialog-close>
+
+      Close
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>

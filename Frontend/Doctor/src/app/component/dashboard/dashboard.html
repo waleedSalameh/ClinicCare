@@ -1,0 +1,211 @@
+<div class="dashboard-container">
+  <div class="dashboard-heading">
+    <h2>Dashboard</h2>
+
+  </div>
+
+  @if (loading) {
+    <p>Loading dashboard...</p>
+  } @else if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+    <button (click)="loadSummary()">Retry</button>
+  } @else {
+    <div class="stats-grid">
+
+      <div class="stat-card total">
+        <div class="stat-icon">📅</div>
+        <div>
+          <p>Total Appointments</p>
+          <h2>{{ summary.todayAppointmentsCount }}</h2>
+          <span>Today's appointments</span>
+        </div>
+      </div>
+
+      <div class="stat-card booked">
+        <div class="stat-icon">🕒</div>
+        <div>
+          <p>Booked Appointments</p>
+          <h2>{{ summary.bookedCount }}</h2>
+          <span>Booked for today</span>
+        </div>
+      </div>
+
+      <div class="stat-card completed">
+        <div class="stat-icon">✓</div>
+        <div>
+          <p>Completed Appointments</p>
+          <h2>{{ summary.completedCount }}</h2>
+          <span>Successfully completed</span>
+        </div>
+      </div>
+
+      <div class="stat-card cancelled">
+        <div class="stat-icon">✕</div>
+        <div>
+          <p>Cancelled Appointments</p>
+          <h2>{{ summary.cancelledCount }}</h2>
+          <span>Cancelled for today</span>
+        </div>
+      </div>
+
+    </div>
+  }
+</div>
+<div class="appointments-section">
+  <div class="section-heading">
+    <div>
+      <h3>Today's Appointments</h3>
+    </div>
+
+    <span class="appointment-count">
+      {{ todayAppointments.length }} appointments
+    </span>
+  </div>
+
+  @if (appointmentsLoading) {
+    <p class="table-message">Loading appointments...</p>
+  } @else if (appointmentsError) {
+    <p class="error">{{ appointmentsError }}</p>
+
+    <button (click)="loadTodayAppointments()">
+      Retry
+    </button>
+  } @else {
+   <p-table
+  [value]="todayAppointments"
+  [stripedRows]="true"
+  [paginator]="todayAppointments.length > 5"
+  [rows]="5"
+  styleClass="today-appointments-table">
+
+  <ng-template #header>
+    <tr>
+      <th>Time</th>
+      <th>Patient</th>
+      <th>Doctor</th>
+      <th>Clinic</th>
+      <th>Status</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-appointment>
+    <tr>
+      <td>{{ appointment.appointmentTime }}</td>
+      <td>{{ appointment.patientName }}</td>
+      <td>{{ appointment.doctorName }}</td>
+      <td>{{ appointment.clincName }}</td>
+     <td>
+  <span
+    class="status-badge"
+    [ngClass]="{
+      'status-booked': appointment.status === 0,
+      'status-confirmed': appointment.status === 1,
+      'status-completed': appointment.status === 2,
+      'status-cancelled': appointment.status === 3,
+      'status-noshow': appointment.status === 4
+    }">
+    {{ getStatusLabel(appointment.status) }}
+  </span>
+</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="5" class="empty-message">
+        No appointments scheduled for today.
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
+  }
+</div>
+<div class="dashboard-middle-section">
+
+  <!-- Appointments by Clinic Chart -->
+  <div class="chart-card">
+    <div class="chart-heading">
+      <div>
+        <h3>Appointments by Clinic</h3>
+        <p>Today's appointments for each clinic</p>
+      </div>
+      <span class="chart-icon">📊</span>
+    </div>
+
+    @if (clinicStats.length > 0) {
+      <div class="chart-container">
+        <p-chart
+          type="bar"
+          [data]="clinicChartData"
+          [options]="clinicChartOptions">
+        </p-chart>
+      </div>
+    } @else {
+      <div class="chart-empty">
+        No clinic appointments available today.
+      </div>
+    }
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <div class="quick-actions-heading">
+      <div>
+        <h3>Quick Actions</h3>
+        <p>Quick access to common tasks</p>
+      </div>
+      <span class="quick-actions-icon">⚡</span>
+    </div>
+
+    <div class="quick-actions-grid">
+
+      <button type="button" class="quick-action-btn appointment-action"
+              routerLink="/appointment">
+        <span class="action-icon">📅</span>
+        <span class="action-text">
+          <strong>Book Appointment</strong>
+          <small>Schedule a new appointment</small>
+        </span>
+      </button>
+
+      <button type="button" class="quick-action-btn patient-action"
+              routerLink="/patients">
+        <span class="action-icon">👤</span>
+        <span class="action-text">
+          <strong>Add Patient</strong>
+          <small>Register a new patient</small>
+        </span>
+      </button>
+
+      <button type="button" class="quick-action-btn doctor-action"
+              routerLink="/doctors">
+        <span class="action-icon">🩺</span>
+        <span class="action-text">
+          <strong>Add Doctor</strong>
+          <small>Register a new doctor</small>
+        </span>
+      </button>
+
+      <button type="button" class="quick-action-btn clinic-action"
+              routerLink="/clinc">
+        <span class="action-icon">🏥</span>
+        <span class="action-text">
+          <strong>Add Clinic</strong>
+          <small>Manage clinic information</small>
+        </span>
+      </button>
+
+      <button type="button" class="quick-action-btn schedule-action"
+              routerLink="/doctor-schedule">
+        <span class="action-icon">🗓️</span>
+        <span class="action-text">
+          <strong>Doctor Schedule</strong>
+          <small>Manage working hours</small>
+        </span>
+      </button>
+
+    </div>
+  </div>
+
+</div>

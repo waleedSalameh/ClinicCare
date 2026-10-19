@@ -1,0 +1,1382 @@
+<div class="page-container">
+
+  <!-- ========================= -->
+  <!-- Header -->
+  <!-- ========================= -->
+
+  <div class="page-header">
+
+    <div>
+      <h2>Appointment List</h2>
+
+    </div>
+
+
+    <button mat-raised-button color="primary" (click)="openAddAppointment()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Appointment
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Search -->
+  <!-- ========================= -->
+
+  <div class="search-card">
+
+    <div class="search-title">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      Search Appointments
+
+    </div>
+
+
+    <div class="search-grid">
+
+
+      <!-- From Date -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          From Date
+        </mat-label>
+
+        <input matInput type="date" [(ngModel)]="fromDate">
+
+      </mat-form-field>
+
+
+      <!-- To Date -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          To Date
+        </mat-label>
+
+        <input matInput type="date" [(ngModel)]="toDate">
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+
+        <mat-label>
+          patient
+        </mat-label>
+
+        <mat-select [(ngModel)]="patientId" name="patientId">
+
+          @for (
+          patient of PatientList;
+          track patient.id
+          ) {
+
+          <mat-option [value]="patient.id">
+
+            {{ patient.fullName }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+
+        <mat-label>
+          Clinic
+        </mat-label>
+
+        <mat-select [(ngModel)]="clincId" name="clincId">
+
+
+          @for (
+          clinic of ClincList;
+          track clinic.id
+          ) {
+
+          <mat-option [value]="clinic.id">
+
+            {{ clinic.clincName }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+
+        <mat-label>
+          Doctor
+        </mat-label>
+
+        <mat-select [(ngModel)]="doctorId" name="doctorId">
+
+          @for (
+          doctor of AllDoctorList;
+          track doctor.id
+          ) {
+
+          <mat-option [value]="doctor.id">
+
+            {{ doctor.fullName }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+
+
+
+
+      <!-- Status -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Status
+        </mat-label>
+
+        <mat-select [(ngModel)]="status">
+
+          <mat-option [value]="null">
+            All
+          </mat-option>
+
+          <mat-option *ngFor="let item of statuses" [value]="item">
+
+            {{ AppointmentStatus[item] }}
+
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+    </div>
+
+
+    <!-- Search Buttons -->
+
+    <div class="search-actions">
+
+      <button mat-raised-button color="primary" (click)="search()">
+
+        <mat-icon>
+          search
+        </mat-icon>
+
+        Search
+
+      </button>
+
+
+      <button mat-stroked-button (click)="clearFilters()">
+
+        <mat-icon>
+          clear
+        </mat-icon>
+
+        Clear
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Table -->
+  <!-- ========================= -->
+
+  <div class="table-card" *ngIf="AppointmentServices.length > 0; else emptyState">
+
+
+    <table mat-table [dataSource]="AppointmentServices" class="appointment-table">
+
+
+      <!-- ID -->
+
+      <ng-container matColumnDef="id">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          ID
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.id }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Appointment Code -->
+
+      <ng-container matColumnDef="appointmentCode">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Code
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.appointmentCode }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- patientId -->
+
+      <ng-container matColumnDef="patientName">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          patient
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.patientName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Doctor -->
+
+      <ng-container matColumnDef="doctorName">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Doctor
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.doctorName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Clinic -->
+
+      <ng-container matColumnDef="clincName">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Clinic
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.clincName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Medical Service -->
+
+      <ng-container matColumnDef="serviceName">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Service
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.serviceName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Appointment Date -->
+
+      <ng-container matColumnDef="appointmentDate">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Date
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.appointmentDate | date:'yyyy-MM-dd' }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Time -->
+
+      <ng-container matColumnDef="time">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Time
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.startTime | slice:0:5 }}
+
+          -
+
+          {{ element.endTime | slice:0:5 }}
+
+        </td>
+
+      </ng-container>
+
+      <!-- Notes -->
+
+      < <ng-container matColumnDef="notes">
+
+        <th mat-header-cell *matHeaderCellDef>
+
+          Notes
+
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+
+          {{ element.notes }}
+
+        </td>
+
+        </ng-container> >
+
+
+        <!-- Created At -->
+
+        <ng-container matColumnDef="createdAt">
+
+          <th mat-header-cell *matHeaderCellDef>
+
+            Created At
+
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+
+            {{ element.createdAt | date:'yyyy-MM-dd ' }}
+
+          </td>
+
+        </ng-container>
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+
+          <th mat-header-cell *matHeaderCellDef>
+            Status
+          </th>
+
+          <td mat-cell *matCellDef="let element">
+
+            <span class="status-badge" [ngClass]="{
+        'status-booked': element.status === 0,
+        'status-confirmed': element.status === 1,
+        'status-completed': element.status === 2,
+        'status-cancelled': element.status === 3,
+        'status-noshow': element.status === 4
+      }">
+
+              <ng-container [ngSwitch]="element.status">
+
+                <span *ngSwitchCase="0">Booked</span>
+                <span *ngSwitchCase="1">Confirmed</span>
+                <span *ngSwitchCase="2">Completed</span>
+                <span *ngSwitchCase="3">Cancelled</span>
+                <span *ngSwitchCase="4">No Show</span>
+
+              </ng-container>
+
+            </span>
+
+          </td>
+
+        </ng-container>
+
+        <!-- Actions -->
+
+        <ng-container matColumnDef="actions">
+
+          <th mat-header-cell *matHeaderCellDef>
+
+            Actions
+
+          </th>
+
+
+          <td mat-cell *matCellDef="let element">
+
+            <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteAppointment(element.id)">
+
+              <mat-icon>
+                delete
+              </mat-icon>
+
+            </button>
+            <!-- Edit -->
+
+
+
+
+
+
+            <!-- Change Status -->
+            <button mat-icon-button color="accent" matTooltip="Change Status"
+              [disabled]="element.status === AppointmentStatus.Completed" (click)="openChangeStatus(element.id)">
+
+              <mat-icon>published_with_changes</mat-icon>
+
+            </button>
+
+
+            <!-- Delete -->
+
+            @if(element.status==AppointmentStatus.Completed){
+            <button mat-icon-button color="primary" matTooltip="Edit" (click)="openEditAppointment(element.id)">
+
+              <mat-icon>
+                assignment
+              </mat-icon>
+
+            </button>
+            }@else {
+            <button mat-icon-button color="primary" matTooltip="Edit" (click)="openEditAppointment(element.id)">
+
+              <mat-icon>
+                edit
+              </mat-icon>
+
+            </button>
+            }
+
+
+            @if (element.status == AppointmentStatus.Confirmed ||element.status == AppointmentStatus.Completed) {
+            <button mat-icon-button color="accent" matTooltip="Change Status"
+              (click)="openAppointmentDetails(element.id)">
+
+              <mat-icon>visibility</mat-icon>
+
+            </button>
+            }
+
+
+          </td>
+
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns">
+        </tr>
+
+
+        <tr mat-row *matRowDef="
+          let row;
+          columns: displayedColumns;
+        ">
+        </tr>
+
+
+    </table>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Empty -->
+  <!-- ========================= -->
+
+  <ng-template #emptyState>
+
+    <div class="empty-state">
+
+      <mat-icon>
+        event_busy
+      </mat-icon>
+
+      <h3>
+        No appointments found
+      </h3>
+
+      <p>
+        There are no appointments matching your search.
+      </p>
+
+    </div>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- ADD / EDIT DIALOG -->
+  <!-- ====================================================== -->
+
+  <ng-template #addAppointmentDialog>
+
+    <h2 mat-dialog-title>
+
+      {{ isEditMode
+      ? 'Edit Appointment'
+      : 'Add Appointment'
+      }}
+
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <form [formGroup]="AppointmentForm" class="appointment-form">
+        <!-- Appointment Code -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Appointment Code
+          </mat-label>
+
+          <input matInput formControlName="appointmentCode" readonly>
+
+        </mat-form-field>
+
+        <!-- patientId -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            patientId Name
+          </mat-label>
+
+          <mat-select formControlName="patientId">
+
+            @for (
+            patientId of PatientList;
+            track patientId.id
+            ) {
+
+            <mat-option [value]="patientId.id">
+
+              {{ patientId.fullName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+          @if (AppointmentForm.get('patientId')?.hasError('required')&& AppointmentForm.get('patientId')?.touched )
+          {<mat-error> patientId is required </mat-error>}
+
+        </mat-form-field>
+
+
+        <!-- Clinic -->
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Clinic Name
+          </mat-label>
+
+          <mat-select formControlName="clincId" (selectionChange)="clinicChanged($event.value)">
+
+            @for (
+            Clincs of ClincList;
+            track Clincs.id
+            ) {
+
+            <mat-option [value]="Clincs.id">
+
+              {{ Clincs.clincName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+
+          @if (
+          AppointmentForm.get('clincId')?.hasError('required')
+          && AppointmentForm.get('clincId')?.touched
+          ) {
+          <mat-error>
+            clincId is required
+          </mat-error>
+          }
+
+        </mat-form-field>
+
+
+         <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Doctor
+          </mat-label>
+
+          <input matInput type="text" formControlName="doctorName" readonly />
+
+        </mat-form-field>
+        <!-- Doctor -->
+
+
+        <!-- Medical Service -->
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Medical Service
+          </mat-label>
+
+          <mat-select formControlName="medicalServiceId"
+            (selectionChange)="AppointmentForm.get('appointmentDate')?.enable()" (selectionChange)="serviceChanged()">
+
+
+            @for (
+            service of MSList;
+            track service.id
+            ) {
+
+            <mat-option [value]="service.id">
+
+              {{ service.serviceName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+
+        </mat-form-field>
+
+        <!-- Appointment Date -->
+        <mat-form-field appearance="outline">
+          <mat-label>Appointment Date</mat-label>
+
+          <input matInput type="date" formControlName="appointmentDate" (change)="getBookingAppointments()">
+        </mat-form-field>
+
+        <div class="available-times-container form-field" *ngIf="availableAppointments.length > 0; else noAppointments">
+
+          <mat-label>Available Appointments</mat-label>
+
+          <div class="available-times">
+            <a href="#" *ngFor="let appointment of availableAppointments"
+              (click)="$event.preventDefault(); selectAppointment(appointment)" class="appointment-link">
+
+              {{ appointment.startTime?.substring(0, 5) }}
+              - {{ appointment.endTime?.substring(0, 5) }}
+
+            </a>
+          </div>
+
+        </div>
+
+        <ng-template #noAppointments>
+          <div class="available-times-container form-field" *ngIf="AppointmentForm.get('appointmentDate')?.value">
+
+            <span>No available appointments for this date.</span>
+
+          </div>
+        </ng-template>
+
+        <!-- Start Time -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>
+            Start Time
+          </mat-label>
+
+          <input matInput type="time" formControlName="startTime" readonly>
+
+        </mat-form-field>
+
+
+        <!-- End Time -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>
+            End Time
+          </mat-label>
+
+          <input matInput type="time" formControlName="endTime" readonly>
+
+        </mat-form-field>
+
+
+        <!-- Status -->
+
+
+
+        <!-- Notes -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Notes
+          </mat-label>
+
+          <input matInput type="text" formControlName="notes">
+
+        </mat-form-field>
+
+
+      </form>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-button mat-dialog-close>
+
+        Cancel
+
+      </button>
+
+
+      <button mat-raised-button color="primary" (click)="save()">
+
+        {{ isEditMode
+        ? 'Update'
+        : 'Save'
+        }}
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- CHANGE STATUS DIALOG -->
+  <!-- ====================================================== -->
+
+  <ng-template #changeStatusDialog>
+
+    <h2 mat-dialog-title>
+      Change Appointment Status
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <div class="status-options">
+
+
+        <button mat-stroked-button class="status-option" (click)="changeStatus(AppointmentStatus.Booked)">
+
+          Booked
+
+        </button>
+
+
+        <button mat-stroked-button class="status-option" (click)="changeStatus(AppointmentStatus.Confirmed)">
+
+          Confirmed
+
+        </button>
+
+
+        <button mat-stroked-button class="status-option" (click)="changeStatus(AppointmentStatus.Completed)">
+
+          Completed
+
+        </button>
+
+
+        <button mat-stroked-button class="status-option" (click)="changeStatus(AppointmentStatus.Cancelled)">
+
+          Cancelled
+
+        </button>
+
+
+        <button mat-stroked-button class="status-option" (click)="changeStatus(AppointmentStatus.NoShow)">
+
+          No Show
+
+        </button>
+
+
+      </div>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-button mat-dialog-close>
+
+        Cancel
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- SUCCESS -->
+  <!-- ====================================================== -->
+
+  <ng-template #successDialog>
+
+    <h2 mat-dialog-title>
+      Success
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <div class="dialog-success">
+
+
+
+        <p>
+          Appointment saved successfully.
+        </p>
+
+      </div>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-raised-button color="primary" mat-dialog-close>
+
+        OK
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- ERROR -->
+  <!-- ====================================================== -->
+
+  <ng-template #errorDialog>
+
+    <h2 mat-dialog-title>
+      Error
+    </h2>
+
+    <mat-dialog-content>
+      <p style="white-space: pre-line;">
+        {{ errorMessage }}
+      </p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>
+        Close
+      </button>
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- DELETE -->
+  <!-- ====================================================== -->
+
+  <ng-template #deleteDialog>
+
+    <h2 mat-dialog-title>
+      Delete Appointment
+    </h2>
+
+
+    <mat-dialog-content>
+
+      Are you sure you want to delete this appointment?
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-button [mat-dialog-close]="false">
+
+        Cancel
+
+      </button>
+
+
+      <button mat-raised-button color="warn" [mat-dialog-close]="true">
+
+        Delete
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- DELETE SUCCESS -->
+  <!-- ====================================================== -->
+
+  <ng-template #deleteSuccessDialog>
+
+    <h2 mat-dialog-title>
+      Success
+    </h2>
+
+
+    <mat-dialog-content>
+
+      Appointment deleted successfully.
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-raised-button color="primary" mat-dialog-close>
+
+        OK
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- DELETE ERROR -->
+  <!-- ====================================================== -->
+
+  <ng-template #deleteErrorDialog>
+
+    <h2 mat-dialog-title>
+      Error
+    </h2>
+
+
+    <mat-dialog-content>
+
+      Failed to delete appointment.
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-raised-button color="warn" mat-dialog-close>
+
+        OK
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- STATUS SUCCESS -->
+  <!-- ====================================================== -->
+
+  <ng-template #statusSuccessDialog>
+
+    <h2 mat-dialog-title>
+      Success
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <div class="dialog-success">
+
+
+        <p>
+          Appointment status changed successfully.
+        </p>
+
+      </div>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-raised-button color="primary" mat-dialog-close>
+
+        OK
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ====================================================== -->
+  <!-- STATUS ERROR -->
+  <!-- ====================================================== -->
+
+  <ng-template #statusErrorDialog>
+
+    <h2 mat-dialog-title>
+      Error
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <div class="dialog-error">
+
+
+        <p>
+          Failed to change appointment status.
+        </p>
+
+      </div>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-raised-button color="warn" mat-dialog-close>
+
+        OK
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+  <ng-template #appointmentDetailsDialog let-data>
+    <h2 mat-dialog-title>Appointment Details</h2>
+
+    <mat-dialog-content class="details-grid">
+
+      <div>
+        <p><strong>Appointment Code:</strong> {{ data?.appointmentCode }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>Patient:</strong> {{ data?.patientName }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>Doctor:</strong> {{ data?.doctorName }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>Clinic:</strong> {{ data?.clincName }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>Medical Service:</strong> {{ data?.serviceName }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p>
+          <strong>Appointment Date:</strong>
+          {{ data?.appointmentDate | date:'yyyy-MM-dd' }}
+        </p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>Start Time:</strong> {{ data?.startTime }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p><strong>End Time:</strong> {{ data?.endTime }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <p>
+          <strong>Status:</strong>
+          <ng-container [ngSwitch]="data?.status">
+            <span *ngSwitchCase="0">Booked</span>
+            <span *ngSwitchCase="1">Confirmed</span>
+            <span *ngSwitchCase="2">Completed</span>
+            <span *ngSwitchCase="3">Cancelled</span>
+            <span *ngSwitchCase="4">No Show</span>
+          </ng-container>
+        </p>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div class="notes-full">
+        <p><strong>Notes:</strong> {{ data?.notes || 'N/A' }}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" mat-dialog-close>
+        Close
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+  <ng-template #AppointmentDialog>
+
+    <h2 mat-dialog-title>
+
+      AppointmentDetails
+
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <form [formGroup]="AppointmentForm" class="appointment-form">
+        <!-- Appointment Code -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Appointment Code
+          </mat-label>
+
+          <input matInput formControlName="appointmentCode" readonly>
+
+        </mat-form-field>
+
+        <!-- patientId -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            patientId Name
+          </mat-label>
+
+          <mat-select formControlName="patientId">
+
+            @for (
+            patientId of PatientList;
+            track patientId.id
+            ) {
+
+            <mat-option [value]="patientId.id">
+
+              {{ patientId.fullName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+          @if (AppointmentForm.get('patientId')?.hasError('required')&& AppointmentForm.get('patientId')?.touched )
+          {<mat-error> patientId is required </mat-error>}
+
+        </mat-form-field>
+
+
+        <!-- Clinic -->
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Clinic Name
+          </mat-label>
+
+          <mat-select formControlName="clincId" (selectionChange)="clinicChanged($event.value)">
+
+            @for (
+            Clincs of ClincList;
+            track Clincs.id
+            ) {
+
+            <mat-option [value]="Clincs.id">
+
+              {{ Clincs.clincName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+
+          @if (
+          AppointmentForm.get('clincId')?.hasError('required')
+          && AppointmentForm.get('clincId')?.touched
+          ) {
+          <mat-error>
+            clincId is required
+          </mat-error>
+          }
+
+        </mat-form-field>
+
+
+        <!-- Doctor -->
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Doctor
+          </mat-label>
+
+          <input matInput type="text" formControlName="doctorName" readonly />
+
+        </mat-form-field>
+
+
+        <!-- Medical Service -->
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Medical Service
+          </mat-label>
+
+          <mat-select formControlName="medicalServiceId"
+            (selectionChange)="AppointmentForm.get('appointmentDate')?.enable()" (selectionChange)="serviceChanged()">
+
+
+            @for (
+            service of MSList;
+            track service.id
+            ) {
+
+            <mat-option [value]="service.id">
+
+              {{ service.serviceName }}
+
+            </mat-option>
+
+            }
+
+          </mat-select>
+
+        </mat-form-field>
+
+        <!-- Appointment Date -->
+        <mat-form-field appearance="outline">
+          <mat-label>Appointment Date</mat-label>
+
+          <input matInput type="date" formControlName="appointmentDate" (change)="getBookingAppointments()">
+        </mat-form-field>
+
+
+
+        <!-- Start Time -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>
+            Start Time
+          </mat-label>
+
+          <input matInput type="time" formControlName="startTime" readonly>
+
+        </mat-form-field>
+
+
+        <!-- End Time -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>
+            End Time
+          </mat-label>
+
+          <input matInput type="time" formControlName="endTime" readonly>
+
+        </mat-form-field>
+
+
+        <!-- Status -->
+
+
+
+        <!-- Notes -->
+
+        <mat-form-field appearance="outline" class="form-field">
+
+          <mat-label>
+            Notes
+          </mat-label>
+
+          <input matInput type="text" formControlName="notes">
+
+        </mat-form-field>
+
+
+      </form>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button mat-button mat-dialog-close>
+
+        Cancel
+
+      </button>
+
+
+
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+</div>

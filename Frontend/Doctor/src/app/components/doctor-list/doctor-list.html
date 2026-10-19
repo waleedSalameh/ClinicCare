@@ -1,0 +1,812 @@
+
+<div class="doctor-container">
+
+
+  <!-- =========================
+       Page Header
+       ========================= -->
+
+  <div class="page-header">
+
+    <h2>
+      Doctors List
+    </h2>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-doctor-button"
+      (click)="openAddDoctor()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Doctor
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       Search
+       ========================= -->
+
+  <div class="search-card">
+
+    <div class="search-title">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      <h3>
+        Search Doctors
+      </h3>
+
+    </div>
+
+
+    <div class="search-fields">
+
+
+      <!-- Doctor Name -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Doctor Name
+        </mat-label>
+
+        <input
+          matInput
+          [(ngModel)]="doctorName">
+
+      </mat-form-field>
+
+
+      <!-- Phone -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Phone Number
+        </mat-label>
+
+        <input
+          matInput
+          [(ngModel)]="phoneNumber"
+          (keydown)="onlyNumbers($event)">
+
+      </mat-form-field>
+
+
+      <!-- Specialty -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Specialty
+        </mat-label>
+
+        <mat-select
+          [(ngModel)]="specialtyId">
+
+          <mat-option [value]="null">
+            All
+          </mat-option>
+
+          @for (
+            specialty of specialties;
+            track specialty.id
+          ) {
+
+            <mat-option
+              [value]="specialty.id">
+
+              {{ specialty.name }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- Search -->
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="search-button"
+        (click)="search()">
+
+        <mat-icon>
+          search
+        </mat-icon>
+
+        Search
+
+      </button>
+
+
+      <!-- Clear -->
+
+      <button
+        mat-stroked-button
+        class="clear-button"
+        (click)="reset()">
+
+        <mat-icon>
+          clear
+        </mat-icon>
+
+        Clear
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       Table
+       ========================= -->
+
+  @if (doctors.length > 0) {
+
+    <table
+      mat-table
+      [dataSource]="doctors"
+      class="doctor-table">
+
+
+      <!-- ID -->
+
+      <ng-container matColumnDef="id">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          ID
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.id }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Full Name -->
+
+      <ng-container matColumnDef="fullName">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Full Name
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.fullName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Specialty -->
+
+      <ng-container matColumnDef="specialty">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Specialty
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.specialtyName }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Gender -->
+
+      <ng-container matColumnDef="gender">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Gender
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.gender }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Phone -->
+
+      <ng-container matColumnDef="phoneNumber">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Phone
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.phoneNumber }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Created Date -->
+
+      <ng-container matColumnDef="createdDateTime">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Created Date
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          {{ doctor.createdDateTime | date:'yyyy-MM-dd' }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Status -->
+
+      <ng-container matColumnDef="isActive">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Status
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+          <span
+            [class.active]="doctor.isActive"
+            [class.inactive]="!doctor.isActive">
+
+            {{ doctor.isActive ? 'Active' : 'Inactive' }}
+
+          </span>
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Actions -->
+
+      <ng-container matColumnDef="actions">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Actions
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let doctor">
+
+
+          <!-- Edit -->
+
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="openEditDoctor(doctor.id)">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+          </button>
+
+
+          <!-- Delete -->
+
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteDoctor(doctor.id)">
+
+            <mat-icon>
+              delete
+            </mat-icon>
+
+          </button>
+
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Header -->
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns">
+      </tr>
+
+
+      <!-- Rows -->
+
+      <tr
+        mat-row
+        *matRowDef="
+          let row;
+          columns: displayedColumns
+        ">
+      </tr>
+
+    </table>
+
+  }
+
+
+  <!-- =========================
+       Empty State
+       ========================= -->
+
+  @if (doctors.length === 0) {
+
+    <div class="empty-state">
+
+      <mat-icon>
+        medical_services
+      </mat-icon>
+
+      <p>
+        No doctors found.
+      </p>
+
+    </div>
+
+  }
+
+
+</div>
+
+
+<!-- =========================================================
+     ADD / EDIT DOCTOR DIALOG
+     ========================================================= -->
+
+<ng-template #addDoctorDialog>
+
+  <h2 mat-dialog-title>
+
+    {{ isEditMode ? 'Edit Doctor' : 'Add Doctor' }}
+
+  </h2>
+
+
+  <mat-dialog-content>
+
+    <form
+      [formGroup]="doctorForm"
+      class="doctor-form">
+
+
+      <!-- Full Name -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Full Name
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="fullName">
+
+      </mat-form-field>
+
+
+      <!-- Specialty -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Specialty
+        </mat-label>
+
+        <mat-select
+          formControlName="specialtyId">
+
+          @for (
+            specialty of specialties;
+            track specialty.id
+          ) {
+
+            <mat-option
+              [value]="specialty.id">
+
+              {{ specialty.name }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- Phone -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Phone Number
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="phoneNumber"
+          (keydown)="onlyNumbers($event)">
+
+      </mat-form-field>
+
+
+      <!-- Experience -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Years Of Experience
+        </mat-label>
+
+        <input
+          matInput
+          type="number"
+          formControlName="yearsOfExperience">
+
+      </mat-form-field>
+
+
+      <!-- Email -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Email
+        </mat-label>
+
+        <input
+          matInput
+          type="email"
+          formControlName="email">
+
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+
+  <mat-label>
+    Created Date & Time
+  </mat-label>
+
+  <input
+    matInput
+    type="datetime-local"
+    formControlName="createdDateTime">
+
+</mat-form-field>
+
+
+      <!-- Gender -->
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field">
+
+        <mat-label>
+          Gender
+        </mat-label>
+
+        <mat-select
+          formControlName="gender">
+
+          <mat-option value="Male">
+            Male
+          </mat-option>
+
+          <mat-option value="Female">
+            Female
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- Active -->
+
+      <div class="status-field">
+
+        <mat-checkbox
+          formControlName="isActive"
+          (change)="only($event.checked)">
+
+          Active
+
+        </mat-checkbox>
+
+      </div>
+
+
+    </form>
+
+  </mat-dialog-content>
+
+
+  <mat-dialog-actions align="end">
+
+
+    <button
+      mat-stroked-button
+      mat-dialog-close>
+
+      Cancel
+
+    </button>
+
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="saveDoctor()">
+
+      {{ isEditMode ? 'Update' : 'Save' }}
+
+    </button>
+
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- =========================================================
+     SUCCESS DIALOG
+     ========================================================= -->
+
+<ng-template #successDialog>
+
+  <h2 mat-dialog-title>
+    Success
+  </h2>
+
+  <mat-dialog-content>
+
+    Doctor saved successfully.
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="primary"
+      mat-dialog-close>
+
+      OK
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- =========================================================
+     ERROR DIALOG
+     ========================================================= -->
+
+<ng-template #errorDialog>
+
+  <h2 mat-dialog-title>
+    Error
+  </h2>
+
+  <mat-dialog-content>
+
+    {{ errorMessage }}
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="warn"
+      mat-dialog-close>
+
+      OK
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- =========================================================
+     DELETE DIALOG
+     ========================================================= -->
+
+<ng-template #deleteDialog>
+
+  <h2 mat-dialog-title>
+    Delete Doctor
+  </h2>
+
+  <mat-dialog-content>
+
+    Are you sure you want to delete this doctor?
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-stroked-button
+      mat-dialog-close>
+
+      Cancel
+
+    </button>
+
+    <button
+      mat-raised-button
+      color="warn"
+      [mat-dialog-close]="true">
+
+      Delete
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- =========================================================
+     DELETE SUCCESS
+     ========================================================= -->
+
+<ng-template #deleteSuccessDialog>
+
+  <h2 mat-dialog-title>
+    Success
+  </h2>
+
+  <mat-dialog-content>
+
+    Doctor deleted successfully.
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="primary"
+      mat-dialog-close>
+
+      OK
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+
+
+<!-- =========================================================
+     DELETE ERROR
+     ========================================================= -->
+
+<ng-template #deleteErrorDialog>
+
+  <h2 mat-dialog-title>
+    Error
+  </h2>
+
+  <mat-dialog-content>
+
+    Unable to delete doctor.
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-raised-button
+      color="warn"
+      mat-dialog-close>
+
+      OK
+
+    </button>
+
+  </mat-dialog-actions>
+
+</ng-template>
+```

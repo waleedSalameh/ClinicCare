@@ -1,0 +1,662 @@
+<div class="medical-service-container">
+
+  <!-- ========================= -->
+  <!-- Page Header -->
+  <!-- ========================= -->
+
+  <div class="page-header">
+
+    <h2>Specialty List</h2>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-medical-service-button"
+      type="button"
+      (click)="openAddSpecialty()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Specialty
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Search & Filter -->
+  <!-- ========================= -->
+
+  <div class="search-card">
+
+    <div class="search-title">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      <h3>
+        Search & Filter
+      </h3>
+
+    </div>
+
+
+    <div class="search-fields">
+
+      <!-- Name -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Specialty Name
+        </mat-label>
+
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="name"
+          placeholder="Enter specialty name">
+
+      </mat-form-field>
+
+
+      <!-- Code -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Specialty Code
+        </mat-label>
+
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="code"
+          placeholder="Enter specialty code">
+
+      </mat-form-field>
+
+
+      <!-- Status -->
+
+      <mat-form-field
+        appearance="outline"
+        class="search-field">
+
+        <mat-label>
+          Status
+        </mat-label>
+
+        <mat-select
+          [(ngModel)]="isActive">
+
+          <mat-option [value]="null">
+            All
+          </mat-option>
+
+          <mat-option [value]="true">
+            Active
+          </mat-option>
+
+          <mat-option [value]="false">
+            Inactive
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- Search -->
+
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        class="search-button"
+        (click)="search()">
+
+        <mat-icon>
+          search
+        </mat-icon>
+
+        Search
+
+      </button>
+
+
+      <!-- Clear -->
+
+      <button
+        mat-stroked-button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()">
+
+        <mat-icon>
+          clear
+        </mat-icon>
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- Specialty Table -->
+  <!-- ========================= -->
+
+  @if (specialties.length > 0) {
+
+    <table
+      mat-table
+      [dataSource]="specialties"
+      class="medical-service-table mat-elevation-z4">
+
+
+      <!-- ID -->
+
+      <ng-container matColumnDef="id">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          ID
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let specialty">
+
+          {{ specialty.id }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Name -->
+
+      <ng-container matColumnDef="name">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Specialty Name
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let specialty">
+
+          {{ specialty.name }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Code -->
+
+      <ng-container matColumnDef="code">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Specialty Code
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let specialty">
+
+          {{ specialty.code }}
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Status -->
+
+      <ng-container matColumnDef="isActive">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Status
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let specialty">
+
+          @if (specialty.isActive) {
+
+            <span class="status active">
+              Active
+            </span>
+
+          } @else {
+
+            <span class="status inactive">
+              Inactive
+            </span>
+
+          }
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Actions -->
+
+      <ng-container matColumnDef="actions">
+
+        <th
+          mat-header-cell
+          *matHeaderCellDef>
+
+          Actions
+
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let specialty">
+
+
+          <!-- Edit -->
+
+          <button
+            mat-icon-button
+            color="primary"
+            type="button"
+            (click)="openEditSpecialty(specialty.id)"
+            aria-label="Edit specialty">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+          </button>
+
+
+          <!-- Delete -->
+
+          <button
+            mat-icon-button
+            color="warn"
+            type="button"
+            (click)="deleteSpecialty(specialty.id)"
+            aria-label="Delete specialty">
+
+            <mat-icon>
+              delete
+            </mat-icon>
+
+          </button>
+
+        </td>
+
+      </ng-container>
+
+
+      <!-- Header -->
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns">
+      </tr>
+
+
+      <!-- Rows -->
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+
+    </table>
+
+  }
+
+
+  @else {
+
+    <!-- ========================= -->
+    <!-- Empty State -->
+    <!-- ========================= -->
+
+    <div class="empty-state">
+
+      <mat-icon>
+        info
+      </mat-icon>
+
+      <p>
+        لا توجد بيانات للعرض
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ================================================= -->
+  <!-- DELETE CONFIRMATION -->
+  <!-- ================================================= -->
+
+  <ng-template #deleteDialog>
+
+    <h2 mat-dialog-title>
+      Confirm Delete
+    </h2>
+
+    <mat-dialog-content>
+
+      Are you sure you want to delete this specialty?
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+
+      <button
+        mat-button
+        [mat-dialog-close]="false">
+
+        Cancel
+
+      </button>
+
+      <button
+        mat-raised-button
+        color="warn"
+        [mat-dialog-close]="true">
+
+        Delete
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ================================================= -->
+  <!-- DELETE SUCCESS -->
+  <!-- ================================================= -->
+
+  <ng-template #deleteSuccessDialog>
+
+    <h2 mat-dialog-title>
+      Success
+    </h2>
+
+    <mat-dialog-content>
+
+      Specialty deleted successfully.
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+
+      <button
+        mat-raised-button
+        color="primary"
+        mat-dialog-close>
+
+        Close
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ================================================= -->
+  <!-- DELETE ERROR -->
+  <!-- ================================================= -->
+
+  <ng-template #deleteErrorDialog>
+
+    <h2 mat-dialog-title>
+      Error
+    </h2>
+
+    <mat-dialog-content>
+
+      Failed to delete specialty.
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+
+      <button
+        mat-raised-button
+        color="warn"
+        mat-dialog-close>
+
+        Close
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ================================================= -->
+  <!-- ADD / EDIT SPECIALTY -->
+  <!-- ================================================= -->
+
+  <ng-template #specialtyDialog>
+
+    <h2 mat-dialog-title>
+
+      {{ isEditMode
+        ? 'Edit Specialty'
+        : 'Add Specialty'
+      }}
+
+    </h2>
+
+
+    <mat-dialog-content>
+
+      <form
+        [formGroup]="specialtyForm"
+        class="medical-service-form">
+
+
+        <!-- Name -->
+
+        <mat-form-field
+          appearance="outline"
+          class="form-field">
+
+          <mat-label>
+            Specialty Name
+          </mat-label>
+
+          <input
+            matInput
+            type="text"
+            formControlName="name">
+
+          @if (
+            specialtyForm.get('name')?.hasError('required')
+            &&
+            specialtyForm.get('name')?.touched
+          ) {
+
+            <mat-error>
+              Specialty name is required
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- Code -->
+
+        <mat-form-field
+          appearance="outline"
+          class="form-field">
+
+          <mat-label>
+            Specialty Code
+          </mat-label>
+
+          <input
+            matInput
+            type="text"
+            formControlName="code">
+
+          @if (
+            specialtyForm.get('code')?.hasError('required')
+            &&
+            specialtyForm.get('code')?.touched
+          ) {
+
+            <mat-error>
+              Specialty code is required
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- Status -->
+
+        <div class="status-field">
+
+          <mat-checkbox
+            formControlName="isActive"
+            (change)="only($event.checked)">
+
+            Active
+
+          </mat-checkbox>
+
+        </div>
+
+
+      </form>
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+
+      <button
+        mat-button
+        mat-dialog-close>
+
+        Cancel
+
+      </button>
+
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="specialtyForm.invalid"
+        (click)="saveSpecialty()">
+
+        <mat-icon>
+          save
+        </mat-icon>
+
+        {{ isEditMode
+          ? 'Update Specialty'
+          : 'Save Specialty'
+        }}
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ================================================= -->
+  <!-- SUCCESS -->
+  <!-- ================================================= -->
+
+  <ng-template #successDialog>
+
+    <h2 mat-dialog-title>
+      Success
+    </h2>
+
+    <mat-dialog-content>
+
+      {{ isEditMode
+        ? 'Specialty updated successfully.'
+        : 'Specialty added successfully.'
+      }}
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+
+      <button
+        mat-raised-button
+        color="primary"
+        mat-dialog-close>
+
+        Close
+
+      </button>
+
+    </mat-dialog-actions>
+
+  </ng-template>
+
+
+  <!-- ================================================= -->
+  <!-- ERROR -->
+  <!-- ================================================= -->
+
+ <ng-template #errorDialog>
+
+  <h2 mat-dialog-title>Error</h2>
+
+  <mat-dialog-content>
+    {{ errorMessage }}
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+      OK
+    </button>
+  </mat-dialog-actions>
+
+</ng-template>
+</div>

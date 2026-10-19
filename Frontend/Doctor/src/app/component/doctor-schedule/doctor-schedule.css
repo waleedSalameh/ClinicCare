@@ -1,0 +1,320 @@
+/* =========================
+   General
+   ========================= */
+
+.doctor-schedule-container {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   Page Header
+   ========================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.page-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* =========================
+   Add Button
+   ========================= */
+
+.add-doctor-schedule-button {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 8px;
+}
+
+.add-doctor-schedule-button mat-icon {
+  margin-right: 6px;
+}
+
+
+/* =========================
+   Search Card
+   ========================= */
+
+.search-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   Search Title
+   ========================= */
+
+.search-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-title h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.search-title mat-icon {
+  font-size: 24px;
+  color: #374151;
+}
+
+
+/* =========================
+   Search Fields
+   ========================= */
+
+.search-fields {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  width: 280px;
+  margin: 0;
+}
+
+
+/* =========================
+   Search Button
+   ========================= */
+
+.search-button {
+  height: 56px;
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 1px solid #000000;
+  border-radius: 6px;
+}
+
+
+/* =========================
+   Clear Button
+   ========================= */
+
+.clear-button {
+  height: 56px;
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 1px solid #000000;
+  border-radius: 6px;
+}
+
+
+/* =========================
+   Table Card
+   ========================= */
+
+.table-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================
+   Table
+   ========================= */
+
+.doctor-schedule-table {
+  width: 100%;
+  background: #ffffff;
+}
+
+.doctor-schedule-table th {
+  background: #f1f5f9;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px;
+}
+
+.doctor-schedule-table td {
+  padding: 15px 16px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.doctor-schedule-table tr {
+  height: 58px;
+}
+
+.doctor-schedule-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* =========================
+   Delete
+   ========================= */
+
+.delete-button {
+  color: #dc2626;
+}
+
+.delete-button:hover {
+  background: #fee2e2;
+}
+
+
+/* =========================
+   Empty State
+   ========================= */
+
+.empty-state {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+
+/* =========================
+   Form
+   ========================= */
+
+.doctor-schedule-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 10px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+
+/* =========================
+   Dialog
+   ========================= */
+
+:host ::ng-deep .mat-mdc-dialog-container {
+  border-radius: 12px;
+}
+
+
+/* =========================
+   Dialog Actions
+   ========================= */
+
+:host ::ng-deep .mat-mdc-dialog-actions {
+  padding: 16px 24px;
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 900px) {
+
+  .search-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .search-button,
+  .clear-button {
+    width: 100%;
+  }
+
+  .doctor-schedule-form {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 600px) {
+
+  .doctor-schedule-container {
+    padding: 14px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .page-header h2 {
+    font-size: 22px;
+  }
+
+  .add-doctor-schedule-button {
+    width: 100%;
+  }
+
+  .doctor-schedule-form {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+}

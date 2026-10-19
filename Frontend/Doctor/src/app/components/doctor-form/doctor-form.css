@@ -1,0 +1,28 @@
+.doctor-form-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+}
+
+.doctor-form-container h2 {
+  margin-bottom: 25px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+::ng-deep .mat-mdc-select-panel {
+  background-color: #f5f5f5 !important;
+}
