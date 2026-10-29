@@ -68,7 +68,7 @@ namespace BLL.Service
                 .ToList();
             if (!Doctor.Any())
             {
-                throw new Exception("Doctor not found.");
+                throw new Exception("Doctor nott found.");
             }
 
             return Doctor;
@@ -87,7 +87,7 @@ namespace BLL.Service
                 .ToList();
             if (!MadicalService.Any())
             {
-                throw new Exception("Medical service not found.");
+                throw new Exception("Medical service nott found.");
             }
 
             return MadicalService;
